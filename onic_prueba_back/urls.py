@@ -22,5 +22,6 @@ urlpatterns = [
     #se crea el endpoint para obtener datos de la API del INS
     path('ins/update-data', views.getDataFromApi),
     path('ins/indigenas', views.getIndigenas),
+    path('ins/departamentos', views.getDepartamentos),
     path('ins/grupos', views.getGrupos),
 ]

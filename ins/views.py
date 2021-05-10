@@ -129,6 +129,17 @@ def getIndigenas(request):
         }, safe=False)
     return HttpResponse(status=403)
 
+def getDepartamentos(request):
+    if request.method == 'GET':
+
+        lista = covid.objects.values_list('departamento_nom', flat=True).distinct()
+        listaOrdenada = str(sorted(list(lista)))
+        #print(type(listaOrdenada))
+        #print(listaOrdenada)
+        
+        return HttpResponse(listaOrdenada)
+    return HttpResponse(status=403)
+
 def getGrupos(request):
     if request.method == 'GET':
         departamento = request.GET.get('departamento', None)
@@ -141,7 +152,9 @@ def getGrupos(request):
             departamento = departamento.upper()
             lista = covid.objects.filter(departamento_nom=departamento).values_list('nom_grupo', flat=True).distinct()
         
-        return HttpResponse(str(list(lista)))
+        listaOrdenada = str(sorted(list(lista)))
+
+        return HttpResponse(listaOrdenada)
     return HttpResponse(status=403)
 
         #     df = pd.DataFrame(list(covid.objects.get(
