@@ -15,7 +15,12 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path
+from ins import views
 
 urlpatterns = [
     path('admin/', admin.site.urls),
+    #se crea el endpoint para obtener datos de la API del INS
+    path('ins/update-data', views.getDataFromApi),
+    path('ins/indigenas', views.getIndigenas),
+    path('ins/grupos', views.getGrupos),
 ]
