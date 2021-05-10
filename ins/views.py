@@ -49,6 +49,15 @@ def getDataFromApi(request):
         #elimina los N/A
         df = df[df.recuperado != 'N/A']
 
+        #elimina Barranquilla
+        df = df[df.departamento_nom != 'BARRANQUILLA']
+
+        #elimina Barranquilla
+        df = df[df.departamento_nom != 'CARTAGENA']
+
+        #elimina Barranquilla
+        df = df[df.departamento_nom != 'STA MARTA D.E.']
+
         print ('borro registros db')
         # elimino todos los registros de la tabla covid
         covid.objects.all().delete()
@@ -121,20 +130,35 @@ def getIndigenas(request):
         print(s)
         
         #logica para tipo contagio
-        tipo_contagio = df.groupby(by=['recuperado', 'fuente_tipo_contagio'])['fuente_tipo_contagio'].count().to_frame().unstack(level=0).to_dict()
+        tipoContagio = df.groupby(by=['recuperado', 'fuente_tipo_contagio'])['fuente_tipo_contagio'].count().to_frame().unstack(level=0).to_dict()
         tc = {}
-        for key in tipo_contagio.keys():
-            tc[key[1]] = tipo_contagio[key]
+        for key in tipoContagio.keys():
+            tc[key[1]] = tipoContagio[key]
         
         print(tc)
 
-        # s = json.loads(str(s))
+        #logica para tipo recuperación
+        tipoRecuperacion = df.groupby(by=['recuperado', 'tipo_recuperacion'])['tipo_recuperacion'].count().to_frame().unstack(level=0).to_dict()
+        tr = {}
+        for key in tipoRecuperacion.keys():
+            tr[key[1]] = tipoRecuperacion[key]
+        
+        print(tr)
 
+        #logica para datos por departamento
+        estadoPorDepto = df.groupby(by=['departamento_nom', 'recuperado'])['recuperado'].count().to_frame().unstack(level=0).to_dict()
+        epd = {}
+        for key in estadoPorDepto.keys():
+            epd[key[1]] = estadoPorDepto[key]
+        
+        print(epd)
 
         #return JsonResponse(data, safe=False)
         return JsonResponse({
             'sexo': str(s),
-            'tipoContagio': str(tc)
+            'tipoContagio': str(tc),
+            'tipoRecuperacion': str(tr),
+            'epd': str(epd)
         }, safe=False)
     return HttpResponse(status=403)
 
