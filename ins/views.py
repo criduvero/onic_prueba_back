@@ -43,6 +43,12 @@ def getDataFromApi(request):
         # convierte nat y nan a None
         df = df.where(pd.notnull(df), None)
 
+        #elimina los fallecidos erroneos
+        df = df[df.recuperado != 'fallecido']
+
+        #elimina los N/A
+        df = df[df.recuperado != 'N/A']
+
         print ('borro registros db')
         # elimino todos los registros de la tabla covid
         covid.objects.all().delete()
@@ -108,17 +114,18 @@ def getIndigenas(request):
         #print(df)
 
         #logica para sexo
-        sexo = df.groupby(by=['sexo','recuperado'])['recuperado'].count().to_frame().unstack(level=0).to_dict()
+        sexo = df.groupby(by=['recuperado', 'sexo'])['sexo'].count().to_frame().unstack(level=0).to_dict()
         s = {}
         for key in sexo.keys():
             s[key[1]] = sexo[key]
         print(s)
         
         #logica para tipo contagio
-        tipo_contagio = df.groupby(by=['fuente_tipo_contagio','recuperado'])['recuperado'].count().to_frame().unstack(level=0).to_dict()
+        tipo_contagio = df.groupby(by=['recuperado', 'fuente_tipo_contagio'])['fuente_tipo_contagio'].count().to_frame().unstack(level=0).to_dict()
         tc = {}
         for key in tipo_contagio.keys():
             tc[key[1]] = tipo_contagio[key]
+        
         print(tc)
 
 
