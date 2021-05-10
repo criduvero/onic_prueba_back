@@ -128,11 +128,13 @@ def getIndigenas(request):
         
         print(tc)
 
+        # s = json.loads(str(s))
+
 
         #return JsonResponse(data, safe=False)
         return JsonResponse({
             'sexo': str(s),
-            'tipo_contagio': str(tc),
+            'tipoContagio': str(tc)
         }, safe=False)
     return HttpResponse(status=403)
 
