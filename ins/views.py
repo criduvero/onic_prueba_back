@@ -131,8 +131,8 @@ def getIndigenas(request):
 
         #return JsonResponse(data, safe=False)
         return JsonResponse({
-            'sexo': s,
-            'tipo_contagio': tc,
+            'sexo': str(s),
+            'tipo_contagio': str(tc),
         }, safe=False)
     return HttpResponse(status=403)
 
@@ -144,7 +144,7 @@ def getDepartamentos(request):
         #print(type(listaOrdenada))
         #print(listaOrdenada)
         
-        return HttpResponse(listaOrdenada)
+        return JsonResponse(listaOrdenada, safe=False)
     return HttpResponse(status=403)
 
 def getGrupos(request):
@@ -159,9 +159,10 @@ def getGrupos(request):
             departamento = departamento.upper()
             lista = covid.objects.filter(departamento_nom=departamento).values_list('nom_grupo', flat=True).distinct()
         
-        listaOrdenada = str(sorted(list(lista)))
+        listaOrdenada = str(list(lista))
 
-        return HttpResponse(listaOrdenada)
+        #return HttpResponse(listaOrdenada)
+        return JsonResponse(listaOrdenada, safe=False)
     return HttpResponse(status=403)
 
         #     df = pd.DataFrame(list(covid.objects.get(
